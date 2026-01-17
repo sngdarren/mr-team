@@ -6,6 +6,8 @@ from job_service import job_service
 from audio_service import merge_audio
 from video_metadata_service import video_metadata_service
 from pdf_parser.pdf_plumber import extract_text_from_pdf
+from pdf_parser.generate_audio import generate_audio
+from generate_videos import generate_videos, load_metadata
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -50,16 +52,57 @@ async def generate_video(pdf: UploadFile = File(...)):
 
     job_id = str(uuid.uuid4())
 
-    async def process_job():
+    try:
         # Save uploaded PDF
         pdf_path = UPLOAD_DIR / f"{job_id}.pdf"
         with open(pdf_path, "wb") as f:
             f.write(await pdf.read())
 
         job_service.create_job(job_id)
-        extracted_text = extract_text_from_pdf(str(pdf_path))
-        if not extracted_text or not extracted_text.strip():
-            raise HTTPException(400, "No extractable text found in PDF")
+
+        # Load metadata to get audio filenames for each segment
+        metadata = load_metadata()
+
+        # Generate videos for each segment
+        segment_to_vid_path = generate_videos()
+
+        # For each segment, get audio files and process
+        for segment_name, vid_path in segment_to_vid_path.items():
+            segment_metadata = metadata[segment_name]
+            audio_filenames = segment_metadata.get("filename", [])
+
+            # Convert filenames to full paths (e.g., "D1_S1_rick.mp3" -> "data/voice_output/D1_S1_rick.mp3")
+            AUDIO_DIR = Path("data/voice_output")
+            MERGED_AUDIO_OUTPUT_DIR = Path("audio")
+            audio_paths = [AUDIO_DIR / filename for filename in audio_filenames]
+
+            # Merge audio files for this segment
+            merged_audio_filename = f"{segment_name.replace(' ', '_')}_merged.mp3"
+            merged_audio_path = merge_audio(
+                audio_paths, MERGED_AUDIO_OUTPUT_DIR / merged_audio_filename
+            )
+
+            # Overlay audio onto video for this segment
+            video_id = str(uuid.uuid4())
+            final_video_path = OUTPUT_DIR / f"{video_id}.mp4"
+            final_video_path = overlay_audio_on_video(
+                str(vid_path), str(merged_audio_path), str(final_video_path)
+            )
+
+            # Add video to job and metadata service
+            job_service.add_video(job_id, final_video_path)
+            video_metadata_service.add_video_metadata(video_id, final_video_path)
+
+        # Mark job as done
+        job_service.mark_done(job_id)
+
+    except Exception as e:
+        print(f"Error processing job {job_id}: {e}")
+        raise
+
+        # extracted_text = extract_text_from_pdf(str(pdf_path))
+        # if not extracted_text or not extracted_text.strip():
+        #     raise HTTPException(400, "No extractable text found in PDF")
 
         # TODO: Process the PDF and generate video
         # 1. Extract text from PDF
@@ -75,21 +118,21 @@ async def generate_video(pdf: UploadFile = File(...)):
         # stitching_service.overlay_audio_and_video(videoPath, audioPath) -> output_video_path
         # update JOB and VIDEOMETADATA
 
-        background_video_path = Path("storage/outputs/minecraft_parkour_video.mp4")
-        if not background_video_path.exists():
-            raise HTTPException(500, "Background video missing")
+        # background_video_path = Path("storage/outputs/minecraft_parkour_video.mp4")
+        # if not background_video_path.exists():
+        #     raise HTTPException(500, "Background video missing")
 
-        video_id = str(uuid.uuid4())
-        output_video_path = OUTPUT_DIR / f"{video_id}.mp4"
-        if not output_video_path.exists():
-            try:
-                output_video_path.symlink_to(background_video_path)
-            except OSError:
-                os.link(background_video_path, output_video_path)
+        # video_id = str(uuid.uuid4())
+        # output_video_path = OUTPUT_DIR / f"{video_id}.mp4"
+        # if not output_video_path.exists():
+        #     try:
+        #         output_video_path.symlink_to(background_video_path)
+        #     except OSError:
+        #         os.link(background_video_path, output_video_path)
 
-        video_metadata_service.add_video_metadata(video_id, output_video_path)
-        job_service.set_videos(job_id, [video_id])
-        job_service.mark_done(job_id)
+        # video_metadata_service.add_video_metadata(video_id, output_video_path)
+        # job_service.set_videos(job_id, [video_id])
+        # job_service.mark_done(job_id)
 
     return GenerateResponse(job_id=job_id, message="PDF uploaded successfully")
 
