@@ -1,0 +1,19 @@
+.env
+.venv
+__pycache__
+
+# Video assets (too large for git)
+video/
+*.mov
+*.mp4
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+*.pyzwz
+*.pyzwzw
+*.pyzwzwz
+*.pyzwzwzw
