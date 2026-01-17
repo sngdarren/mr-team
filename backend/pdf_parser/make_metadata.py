@@ -179,7 +179,7 @@ def save_to_json(data, output_path):
     print(f"\n✓ Saved metadata to: {output_file}")
 
 
-def main():
+def get_transcript_metadata():
     """Main function to process audio files and add remaining metadata fields."""
     # Get the directory paths
     script_dir = Path(__file__).parent
@@ -227,4 +227,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    get_transcript_metadata()
