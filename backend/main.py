@@ -106,7 +106,6 @@ def stream_video(video_path: Path, request: Request):
         raise HTTPException(404, "Video not found")
 
     range_header = request.headers.get("range")
-    print("HI", range_header)
     if not range_header:
         return FileResponse(video_path, media_type="video/mp4")
 
