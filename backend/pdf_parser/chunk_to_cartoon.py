@@ -1,4 +1,6 @@
 import os
+import json
+import re
 import asyncio
 from pathlib import Path
 from anthropic import AsyncAnthropic
@@ -7,6 +9,41 @@ from pdf_plumber import pdf_to_chunk
 
 # Load environment variables
 load_dotenv()
+
+
+def split_dialogue_by_speaker(dialogue_text):
+    """
+    Split a dialogue string by [rick] and [morty] delimiters.
+    
+    Args:
+        dialogue_text: String containing dialogue with [rick] and [morty] markers
+        
+    Returns:
+        List of dicts: [{'speaker': 'rick', 'text': '...'}, ...]
+    """
+    pattern = r'\[(rick|morty)\]\s*'
+    
+    segments = []
+    matches = list(re.finditer(pattern, dialogue_text, re.IGNORECASE))
+    
+    for i, match in enumerate(matches):
+        speaker = match.group(1).lower()
+        start = match.end()
+        
+        if i < len(matches) - 1:
+            end = matches[i + 1].start()
+        else:
+            end = len(dialogue_text)
+        
+        text = dialogue_text[start:end].strip()
+        
+        if text:
+            segments.append({
+                'speaker': speaker,
+                'text': text
+            })
+    
+    return segments
 
 
 async def convert_chunk_to_cartoon(chunk_text, system_prompt, segment_id):
@@ -154,6 +191,7 @@ async def process_chunks_to_cartoons():
 async def pdf_to_cartoon_chunk():
     """
     Process all PDF chunks and convert them to cartoon dialogues concurrently.
+    Creates the skeleton JSON structure with transcripts and person fields.
     
     Returns:
         List of cartoon dialogue strings ready for async processing
@@ -177,6 +215,57 @@ async def pdf_to_cartoon_chunk():
         print(f"--- Dialogue {i} ---")
         print(dialogue)
         print(f"\n{'-'*60}\n")
+    
+    # Create skeleton JSON structure with transcripts and person
+    print(f"\n{'='*60}")
+    print("CREATING METADATA SKELETON")
+    print(f"{'='*60}\n")
+    
+    metadata = {
+        "segment 1": {
+            "transcripts": [],
+            "person": [],
+            "timestamps": [],
+            "filename": []
+        },
+        "segment 2": {
+            "transcripts": [],
+            "person": [],
+            "timestamps": [],
+            "filename": []
+        },
+        "segment 3": {
+            "transcripts": [],
+            "person": [],
+            "timestamps": [],
+            "filename": []
+        }
+    }
+    
+    # Process each dialogue and populate transcripts and person
+    for dialogue_index, dialogue in enumerate(cartoon_dialogues, 1):
+        segment_key = f"segment {dialogue_index}"
+        
+        if segment_key in metadata:
+            # Split dialogue by speaker
+            segments = split_dialogue_by_speaker(dialogue)
+            
+            print(f"{segment_key.title()}: {len(segments)} speaker segments")
+            
+            for seg in segments:
+                metadata[segment_key]["transcripts"].append(seg['text'])
+                metadata[segment_key]["person"].append(seg['speaker'])
+    
+    # Save skeleton to JSON
+    script_dir = Path(__file__).parent
+    output_file = script_dir.parent / "data" / "audio_metadata.json"
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(metadata, f, indent=2, ensure_ascii=False)
+    
+    print(f"\n✓ Saved metadata skeleton to: {output_file}")
+    print("  (timestamps and filename fields will be added by make_metadata.py)")
     
     return cartoon_dialogues
 
