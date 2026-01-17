@@ -18,3 +18,5 @@ video/
 *.pyzwzwz
 *.pyzwzwzw
 **/voice_output/
+
+*.DS_Store
