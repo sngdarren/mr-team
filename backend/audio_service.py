@@ -1,6 +1,7 @@
 from pathlib import Path
 import time
 from typing import List
+
 from moviepy import AudioFileClip, concatenate_audioclips
 
 
@@ -9,7 +10,7 @@ def merge_audio(audio_file_paths: List[Path], output_file: Path) -> Path:
     if not audio_file_paths:
         raise ValueError("audio_file_paths must contain at least one Path")
 
-    clips = []
+    clips = []  # store all audio clips
     try:
         for p in audio_file_paths:
             if not p.exists() or not p.is_file():
@@ -33,8 +34,8 @@ def merge_audio(audio_file_paths: List[Path], output_file: Path) -> Path:
                 pass
 
 
-if __name__ == "__main__":
-    paths = [Path("storage/audio/test1.mp3"), Path("storage/audio/test2.mp3")]
-    output_path = Path("storage/audio/output.mp3")
-    output_path = merge_audio(paths, output_path)
-    print("Merged audio written to", output_path)
+# if __name__ == "__main__":
+#     paths = [Path("storage/audio/test1.mp3"), Path("storage/audio/test2.mp3")]
+#     output_path = Path("storage/audio/output.mp3")
+#     output_path = merge_audio(paths, output_path)
+#     print("Merged audio written to", output_path)
