@@ -3,7 +3,9 @@ import uuid
 from pathlib import Path
 from stitching_service import overlay_audio_on_video
 from job_service import job_service
+from audio_service import merge_audio
 from video_metadata_service import video_metadata_service
+from pdf_parser.pdf_plumber import extract_text_from_pdf
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -48,27 +50,46 @@ async def generate_video(pdf: UploadFile = File(...)):
 
     job_id = str(uuid.uuid4())
 
-    # Save uploaded PDF
-    pdf_path = UPLOAD_DIR / f"{job_id}.pdf"
-    with open(pdf_path, "wb") as f:
-        f.write(await pdf.read())
+    async def process_job():
+        # Save uploaded PDF
+        pdf_path = UPLOAD_DIR / f"{job_id}.pdf"
+        with open(pdf_path, "wb") as f:
+            f.write(await pdf.read())
 
-    # TODO: Process the PDF and generate video
-    # 1. Extract text from PDF
-    # 2. Generate Rick & Morty script with OpenAI
-    # 3. Generate audio -> return audio files
-    # 4. Compose video with brainrot background
+        job_service.create_job(job_id)
+        extracted_text = extract_text_from_pdf(str(pdf_path))
+        if not extracted_text or not extracted_text.strip():
+            raise HTTPException(400, "No extractable text found in PDF")
 
-    # Darren returns { chunkId: audiometadata[], }
-    # For each chunk:
-    # Kai stitches images onto background video for one chunk -> returns video paths
-    # image_service.stitch(chunkToAudio) -> { chunkId: videoPaths[] }
-    # audio_service.merge(audioPaths[]) -> audioPath
-    # stitching_service.overlay_audio_and_video(videoPath, audioPath) -> output_video_path
+        # TODO: Process the PDF and generate video
+        # 1. Extract text from PDF
+        # 2. Generate Rick & Morty script with OpenAI
+        # 3. Generate audio -> return audio files
+        # 4. Compose video with brainrot background
 
-    # Merge audio files tgt into one audio file
-    # Merge audio files for one video into one audio file
-    # Merge background with
+        # Darren returns { chunkId: audiometadata[], }
+        # For each chunk:
+        # Kai stitches images onto background video for one chunk -> returns video paths
+        # image_service.stitch(chunkToAudio) -> { chunkId: videoPaths[] }
+        # audio_service.merge(audioPaths[]) -> audioPath
+        # stitching_service.overlay_audio_and_video(videoPath, audioPath) -> output_video_path
+        # update JOB and VIDEOMETADATA
+
+        background_video_path = Path("storage/outputs/minecraft_parkour_video.mp4")
+        if not background_video_path.exists():
+            raise HTTPException(500, "Background video missing")
+
+        video_id = str(uuid.uuid4())
+        output_video_path = OUTPUT_DIR / f"{video_id}.mp4"
+        if not output_video_path.exists():
+            try:
+                output_video_path.symlink_to(background_video_path)
+            except OSError:
+                os.link(background_video_path, output_video_path)
+
+        video_metadata_service.add_video_metadata(video_id, output_video_path)
+        job_service.set_videos(job_id, [video_id])
+        job_service.mark_done(job_id)
 
     return GenerateResponse(job_id=job_id, message="PDF uploaded successfully")
 
