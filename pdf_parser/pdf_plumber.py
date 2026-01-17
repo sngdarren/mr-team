@@ -141,7 +141,7 @@ def process_all_pdfs_in_folder(folder_path, system_prompt_path):
 def pdf_to_chunk():
     # Get the directory where this script is located
     script_dir = Path(__file__).parent
-    pdf_data_folder = script_dir / "pdf_data"
+    pdf_data_folder = script_dir.parent / "data" / "pdf_data"
     system_prompt_path = script_dir.parent / "prompts" / "content_splitter.txt"
     
     print(f"Looking for PDFs in: {pdf_data_folder}")

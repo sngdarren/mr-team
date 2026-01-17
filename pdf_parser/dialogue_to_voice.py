@@ -9,6 +9,9 @@ from chunk_to_cartoon import pdf_to_cartoon_chunk
 # Load environment variables
 load_dotenv()
 
+# Output directory for voice files (absolute path to root-level data folder)
+OUTPUT_DIR = Path(__file__).parent.parent / "data" / "voice_output"
+
 # Voice model IDs for each character
 VOICE_MODELS = {
     'rick': '6d90f8435d8845db852174d5fecb42c0',
@@ -210,7 +213,7 @@ async def process_all_dialogues():
         
         # Create async task for each segment
         for segment_index, segment in enumerate(segments, 1):
-            task = process_dialogue_segment(segment, dialogue_index, segment_index, output_dir="voice_output", semaphore=semaphore)
+            task = process_dialogue_segment(segment, dialogue_index, segment_index, output_dir=str(OUTPUT_DIR), semaphore=semaphore)
             all_tasks.append(task)
     
     print(f"\n{'='*60}")
@@ -299,7 +302,7 @@ async def test_with_example():
         
         # Create async task for each segment
         for segment_index, segment in enumerate(segments, 1):
-            task = process_dialogue_segment(segment, dialogue_index, segment_index, output_dir="voice_output", semaphore=semaphore)
+            task = process_dialogue_segment(segment, dialogue_index, segment_index, output_dir=str(OUTPUT_DIR), semaphore=semaphore)
             all_tasks.append(task)
     
     print(f"\n{'='*60}")
