@@ -1,0 +1,116 @@
+{
+  "segment 1": {
+    "transcripts": [
+      "Morty, when you've got massive optimization problems like finding the shortest route through a hundred cities, checking every possible solution would take longer than the heat death of the universe.",
+      "Uh, okay Rick, so what do we do instead?",
+      "Local search, Morty. You just pick a random starting point, look at the solutions right next to it, and move to whichever one's better.",
+      "So it's like, uh, climbing a hill when you can't see very far?",
+      "Exactly! You keep stepping upward until you can't go any higher. You won't always reach the absolute peak, but you'll get somewhere pretty decent.",
+      "And the longer we do this, the better our answer gets?",
+      "Bingo, Morty. It's not perfect, but it beats waiting billions of years for the \"optimal\" solution."
+    ],
+    "person": [
+      "rick",
+      "morty",
+      "rick",
+      "morty",
+      "rick",
+      "morty",
+      "rick"
+    ],
+    "timestamps": [
+      8.1240625,
+      11.445250000000001,
+      17.639937500000002,
+      21.326875,
+      28.357437500000003,
+      31.391312500000005,
+      36.43656250000001
+    ],
+    "filename": [
+      "D1_S1_rick.mp3",
+      "D1_S2_morty.mp3",
+      "D1_S3_rick.mp3",
+      "D1_S4_morty.mp3",
+      "D1_S5_rick.mp3",
+      "D1_S6_morty.mp3",
+      "D1_S7_rick.mp3"
+    ]
+  },
+  "segment 2": {
+    "transcripts": [
+      "Alright Morty, imagine chess but with math. Every possible move creates a branching tree of game states, and you need to pick the path that screws you over the least.",
+      "Wait, screws me over the least? Shouldn't I try to win?",
+      "That's the thing - minimax assumes your opponent isn't an idiot. You maximize your advantage, they minimize it. So you work backwards from the endgame asking \"what's the best I can do if they play perfectly?\"",
+      "So like, I'm planning for them to make the smartest possible move against me?",
+      "Exactly. You calculate every branch assuming optimal play from both sides. The minimax value is the best outcome you can guarantee yourself against a perfect opponent.",
+      "Oh, so it's like the worst-case scenario but in a good way?",
+      "Bingo Morty. Plan for the worst, hope for human error."
+    ],
+    "person": [
+      "rick",
+      "morty",
+      "rick",
+      "morty",
+      "rick",
+      "morty",
+      "rick"
+    ],
+    "timestamps": [
+      7.549375,
+      11.0011875,
+      20.4089375,
+      25.036250000000003,
+      33.7909375,
+      37.347249999999995,
+      41.504374999999996
+    ],
+    "filename": [
+      "D2_S1_rick.mp3",
+      "D2_S2_morty.mp3",
+      "D2_S3_rick.mp3",
+      "D2_S4_morty.mp3",
+      "D2_S5_rick.mp3",
+      "D2_S6_morty.mp3",
+      "D2_S7_rick.mp3"
+    ]
+  },
+  "segment 3": {
+    "transcripts": [
+      "Alright Morty, minimax finds the perfect move but it's stupidly slow because it checks every possible game. Alpha-beta pruning fixes that by cutting off useless branches.",
+      "Wait, how does it know which branches are useless?",
+      "Simple. We track two numbers - alpha is your best guaranteed score, beta is your opponent's best guaranteed score. If you find a move where your opponent can screw you over worse than what you already have locked in, you stop looking.",
+      "So like, if I already found a way to win 5 points, and I'm looking at a path where my opponent can hold me to 3 points, I just give up on that path?",
+      "Exactly! Your opponent's not an idiot, Morty. They'll never let you take the better path anyway. Same optimal move, way less computation.",
+      "That's actually pretty smart. So we still get the perfect answer but faster?",
+      "Bingo. It's like having a crystal ball that tells you when you're wasting your time."
+    ],
+    "person": [
+      "rick",
+      "morty",
+      "rick",
+      "morty",
+      "rick",
+      "morty",
+      "rick"
+    ],
+    "timestamps": [
+      7.41875,
+      10.5570625,
+      22.2374375,
+      30.391312499999998,
+      38.414562499999995,
+      42.989625,
+      47.016124999999995
+    ],
+    "filename": [
+      "D3_S1_rick.mp3",
+      "D3_S2_morty.mp3",
+      "D3_S3_rick.mp3",
+      "D3_S4_morty.mp3",
+      "D3_S5_rick.mp3",
+      "D3_S6_morty.mp3",
+      "D3_S7_rick.mp3"
+    ]
+  }
+}
