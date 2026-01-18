@@ -11,6 +11,8 @@ load_dotenv()
 
 # Output directory for voice files (absolute path to root-level data folder)
 OUTPUT_DIR = Path(__file__).parent.parent / "data" / "voice_output"
+# CREATE IF DOESNT EXIT
+OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Voice model IDs for each character
 VOICE_MODELS = {
