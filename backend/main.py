@@ -18,6 +18,16 @@ from pydantic import BaseModel
 
 app = FastAPI(title="MR-Team: Brainrot Video Generator")
 
+@app.on_event("startup")
+def populate_mock_data():
+    """Populate mock data for testing purposes."""
+    # This function can be expanded to add mock jobs and video metadata
+    job_service.create_job("1")
+    job_service.mark_done("1")
+    video_metadata_service.add_video_metadata("1", "outputs/test1.mp4")
+    video_metadata_service.add_video_metadata("2", "outputs/test2.mp4")
+    video_metadata_service.add_video_metadata("3", "outputs/test3.mp4")
+    job_service.set_videos("1", ["1", "2", "3"])
 
 # CORS
 app.add_middleware(
@@ -111,6 +121,8 @@ def process_job_background(job_id: str, pdf_path: str):
             job_service.add_video(job_id, final_video_path)
             video_metadata_service.add_video_metadata(video_id, final_video_path)
 
+            # upload 
+
         # Mark job as done
         job_service.mark_done(job_id)
         print(f"✓ Job {job_id} completed")
@@ -168,7 +180,7 @@ def get_status(job_id: str):
 
     return {"job_id": job_id, "status": status.name.lower()}
 
-
+# Returns a VideoMetadata[] for a given job.
 @app.get("/videos/{job_id}/list")
 def get_videos_list(job_id: str):
     """Get list of video IDs for a given job."""
