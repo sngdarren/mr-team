@@ -13,11 +13,9 @@ from image_service import process_segments
 SCRIPT_DIR = Path(__file__).parent
 METADATA_FILE = SCRIPT_DIR / "data" / "audio_metadata.json"
 VIDEO_PATH = SCRIPT_DIR / "video" / "brainrot" / "minecraft_parkour_video.mov"
-RICK_IMAGE = SCRIPT_DIR.parent / "images" / "rick.png"
+RICK_IMAGE = SCRIPT_DIR / "images" / "rick.png"
 MORTY_IMAGE = (
-    SCRIPT_DIR.parent
-    / "images"
-    / "rick-and-morty-rick-morty-projectacademy-medium-17.png"
+    SCRIPT_DIR / "images" / "rick-and-morty-rick-morty-projectacademy-medium-17.png"
 )
 OUTPUT_DIR = SCRIPT_DIR.parent / "outputs" / "videos"
 
