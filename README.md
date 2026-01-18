@@ -2,8 +2,6 @@
 
 Transform boring lecture notes into engaging 30-second "brainrot" videos featuring Rick and Morty discussing your study material!
 
-test commit
-
 ## Features
 
 - 📄 **PDF Upload**: Upload lecture notes in PDF format
