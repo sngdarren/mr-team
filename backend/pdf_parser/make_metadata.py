@@ -55,14 +55,14 @@ def parse_filename(filename):
     return segment_number, person
 
 
-def generate_timestamps(start_time, duration, interval=0.5):
+def generate_timestamps(start_time, duration, interval=0.0):
     """
     Generate timestamps at regular intervals starting from a specific time.
     
     Args:
         start_time: Starting timestamp in seconds
         duration: Total duration in seconds
-        interval: Time interval in seconds (default 0.5)
+        interval: Time interval in seconds (default 0.0)
         
     Returns:
         List of timestamps
@@ -129,7 +129,7 @@ def process_audio_files(audio_dir, metadata_skeleton):
     print(f"{'='*60}")
     print("Processing complete!\n")
     
-    # Convert durations to cumulative timestamps with 0.5s intervals
+    # Convert durations to cumulative timestamps with 0.0s intervals
     print("Converting to cumulative timestamps...\n")
     for segment_key in ["segment 1", "segment 2", "segment 3"]:
         durations = metadata_skeleton[segment_key]["timestamps"]
@@ -142,8 +142,8 @@ def process_audio_files(audio_dir, metadata_skeleton):
                     # First file: just use the duration
                     cumulative_time = duration
                 else:
-                    # Subsequent files: add 0.5s interval + duration
-                    cumulative_time = cumulative_time + 0.5 + duration
+                    # Subsequent files: add 0.0s interval + duration
+                    cumulative_time = cumulative_time + duration
                 
                 cumulative_timestamps.append(cumulative_time)
             
