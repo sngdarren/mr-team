@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 # Create directories on startup
-UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR = Path("data/pdf_data")
 OUTPUT_DIR = Path("outputs")
 UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
