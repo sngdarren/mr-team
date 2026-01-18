@@ -54,13 +54,13 @@ def parse_filename(filename):
     return segment_number, person
 
 
-def generate_timestamps(duration, interval=0.5):
+def generate_timestamps(duration, interval=0.0):
     """
     Generate timestamps at regular intervals.
     
     Args:
         duration: Total duration in seconds
-        interval: Time interval in seconds (default 0.5)
+        interval: Time interval in seconds (default 0)
         
     Returns:
         List of timestamps
@@ -147,7 +147,7 @@ def process_audio_files(audio_dir):
             
             print(f"✓ {filename}")
             print(f"  Segment: {segment_number}, Person: {person}, Duration: {duration:.2f}s")
-            print(f"  Timestamps: {len(timestamps)} intervals (0.5s each)\n")
+            print(f"  Timestamps: {len(timestamps)} intervals (0.0s each)\n")
     
     print(f"{'='*60}")
     print("Processing complete!\n")

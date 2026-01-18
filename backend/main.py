@@ -1,11 +1,13 @@
 import os
 import uuid
+import threading
 from pathlib import Path
 from stitching_service import overlay_audio_on_video
 from job_service import job_service
 from audio_service import merge_audio
 from video_metadata_service import video_metadata_service
-from pdf_parser.pdf_plumber import extract_text_from_pdf
+
+# from pdf_parser.pdf_plumber import extract_text_from_pdf
 from pdf_parser.generate_audio import generate_audio
 from generate_videos import generate_videos, load_metadata
 
@@ -32,6 +34,9 @@ OUTPUT_DIR = Path("outputs")
 UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
 
+AUDIO_DIR = Path("data/voice_output")
+MERGED_AUDIO_OUTPUT_DIR = Path("audio")
+
 
 class GenerateResponse(BaseModel):
     job_id: str
@@ -52,14 +57,29 @@ async def generate_video(pdf: UploadFile = File(...)):
 
     job_id = str(uuid.uuid4())
 
+    # Save the PDF file to UPLOAD_DIR
+    pdf_path = UPLOAD_DIR / f"{job_id}.pdf"
+    with open(pdf_path, "wb") as f:
+        f.write(await pdf.read())
+
+    # Create job immediately
+    job_service.create_job(job_id)
+
+    # Start processing in background thread
+    thread = threading.Thread(
+        target=process_job_background, args=(job_id, pdf_path), daemon=True
+    )
+    thread.start()
+
+    # Return immediately with job_id
+    return GenerateResponse(job_id=job_id, message="Processing started")
+
+
+def process_job_background(job_id: str, pdf_path: str):
+    """Background thread to process the job"""
     try:
         # Save uploaded PDF
-        pdf_path = UPLOAD_DIR / f"{job_id}.pdf"
-        with open(pdf_path, "wb") as f:
-            f.write(await pdf.read())
-
-        job_service.create_job(job_id)
-
+        generate_audio()
         # Load metadata to get audio filenames for each segment
         metadata = load_metadata()
 
@@ -71,9 +91,7 @@ async def generate_video(pdf: UploadFile = File(...)):
             segment_metadata = metadata[segment_name]
             audio_filenames = segment_metadata.get("filename", [])
 
-            # Convert filenames to full paths (e.g., "D1_S1_rick.mp3" -> "data/voice_output/D1_S1_rick.mp3")
-            AUDIO_DIR = Path("data/voice_output")
-            MERGED_AUDIO_OUTPUT_DIR = Path("audio")
+            # Convert filenames to full paths
             audio_paths = [AUDIO_DIR / filename for filename in audio_filenames]
 
             # Merge audio files for this segment
@@ -95,10 +113,13 @@ async def generate_video(pdf: UploadFile = File(...)):
 
         # Mark job as done
         job_service.mark_done(job_id)
+        print(f"✓ Job {job_id} completed")
+
+        # Delete PDF
+        os.remove(pdf_path)
 
     except Exception as e:
-        print(f"Error processing job {job_id}: {e}")
-        raise
+        print(f"✗ Error processing job {job_id}: {e}")
 
         # extracted_text = extract_text_from_pdf(str(pdf_path))
         # if not extracted_text or not extracted_text.strip():

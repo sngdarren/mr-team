@@ -1,13 +1,13 @@
 {
   "segment 1": {
     "transcripts": [
-      "Alright Morty, imagine a peer-to-peer chat system. There's a server that's basically a phone book - it just remembers which client uses which UDP port number.",
-      "So like, the server just keeps track of everyone's address?",
-      "Exactly. When you want to chat with someone, you ask the server for their port number. Simple stuff. But the client side is where things get interesting.",
-      "What makes the client more complicated?",
-      "The client needs to multitask, Morty. It's gotta send your messages AND listen for incoming ones at the same time. So it uses two threads - one main thread for your commands, and a listener thread that's always waiting for messages.",
-      "Oh, so it's like talking and listening at the same time without getting confused?",
-      "Bingo. Without that separation, you'd have chaos - like two people trying to answer the same phone. Threading keeps everything organized."
+      "So this kid started in pharmaceutical science, right? But then realized staring at molecules all day wasn't exactly thrilling.",
+      "Wait, so they just switched majors completely? That sounds scary, Rick.",
+      "Scary? Morty, they figured out what actually excited them - breaking down complex problems and turning ideas into working code. That's called self-awareness.",
+      "But like, how did they know computer science was better?",
+      "Two internships, personal projects, building systems real people actually use. They saw their code solving actual problems instead of just theoretical nonsense.",
+      "Oh, so they found something that had real impact?",
+      "Exactly. Sometimes the best career moves happen when you follow what genuinely excites you, even if it means starting over. Basic life advice, Morty."
     ],
     "person": [
       "rick",
@@ -19,13 +19,13 @@
       "rick"
     ],
     "timestamps": [
-      7.52325,
-      10.609312500000001,
-      17.796625000000002,
-      20.386375,
-      31.3614375,
-      35.98875,
-      42.940937500000004
+      5.7469375,
+      10.191374999999999,
+      18.4496875,
+      21.6925,
+      31.936124999999997,
+      35.3618125,
+      43.0454375
     ],
     "filename": [
       "D1_S1_rick.mp3",
@@ -39,13 +39,13 @@
   },
   "segment 2": {
     "transcripts": [
-      "Alright Morty, imagine your ears and mouth both trying to use the same phone line at once. Total disaster, right?",
-      "Uh, yeah Rick, that sounds like it would be all garbled and stuff.",
-      "Exactly! That's what happens when multiple threads grab messages from the same network socket. They step all over each other and freeze the whole system.",
-      "So how do you fix that mess?",
-      "Simple - make one thread the receptionist. It catches all the messages and drops them in a shared mailbox. The other thread just checks the mailbox instead of fighting for the phone line.",
-      "Oh, so like having one person answer all the calls and take messages?",
-      "Bingo! And we use a condition variable as a doorbell to alert when new mail arrives. No more race conditions, no more frozen systems."
+      "Alright Morty, personal projects are where real learning happens. You build stuff that actually works, not just toy examples.",
+      "Like what kind of stuff, Rick?",
+      "Full-stack web forums with Go and React, key-value stores in C++, concurrent web servers. You know, systems that don't fall apart when people actually use them.",
+      "Wait, so you're saying I should start with simple projects and then make them more complicated?",
+      "Exactly! Start with basic authentication, then add containerization, cloud deployment. Each project teaches you something new while building on what you already know.",
+      "But how do I make sure my code doesn't become a mess?",
+      "Structure matters, Morty. Use proper layers - controllers, services, repositories. And always test under pressure. If your system crashes when ten people use it, you learned nothing."
     ],
     "person": [
       "rick",
@@ -57,13 +57,13 @@
       "rick"
     ],
     "timestamps": [
-      5.3289375,
-      9.1725625,
-      16.542749999999998,
-      18.557812499999997,
-      27.443062499999996,
-      31.312812499999996,
-      38.761374999999994
+      6.269375,
+      8.754625,
+      16.9085,
+      21.95375,
+      30.7084375,
+      33.6116875,
+      43.907562500000004
     ],
     "filename": [
       "D2_S1_rick.mp3",
@@ -77,13 +77,13 @@
   },
   "segment 3": {
     "transcripts": [
-      "Alright Morty, imagine you're trying to have a conversation while also watching for the doorbell. You can't do both perfectly at once.",
-      "Oh, so like when I'm texting and my mom calls for dinner? I miss both?",
-      "Exactly. Early programmers tried using separate threads - one for user input, one for connections. But then both threads fought over the terminal like idiots.",
-      "Wait, what's a thread again?",
-      "Think of it as separate workers doing different jobs. Problem was, they kept interrupting each other when trying to use the same keyboard.",
-      "So how'd they fix it?",
-      "Simple solution, Morty. Instead of waiting forever for input, check every half second. Handle any incoming connections, then go back to waiting for the user. No fighting, no chaos."
+      "Alright Morty, here's the thing about internships - they teach you stuff personal projects never will. Like how to actually work with other people's messy code.",
+      "Oh geez Rick, but isn't coding just coding? Like, what's so different about doing it with other people?",
+      "*burp* Wrong, Morty. Real work means you can't just wait around for someone to tell you what to do. You gotta analyze problems, weigh your options, then confidently pitch solutions to your team.",
+      "So like, instead of just following tutorials, you have to actually think through different ways to solve things?",
+      "Exactly! Plus you learn the boring but crucial stuff - documentation, testing, clear communication. These soft skills are what separate amateur coders from actual professionals.",
+      "Wait, so the technical stuff isn't even the hardest part?",
+      "Nope! The hardest part is explaining your technical decisions to other humans without making them want to punch you in the face."
     ],
     "person": [
       "rick",
@@ -95,13 +95,13 @@
       "rick"
     ],
     "timestamps": [
-      5.851375,
-      10.191375,
-      18.6586875,
-      20.490875,
-      27.025125,
-      28.805125,
-      38.3434375
+      6.6350625,
+      12.594625,
+      23.15175,
+      28.9284375,
+      38.754125,
+      41.761875,
+      47.7736875
     ],
     "filename": [
       "D3_S1_rick.mp3",
