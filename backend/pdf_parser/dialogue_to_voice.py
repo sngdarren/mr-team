@@ -16,7 +16,7 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Voice model IDs for each character
 VOICE_MODELS = {
-    "rick": "6d90f8435d8845db852174d5fecb42c0",
+    "rick": "ada3fab76e534bba88c08a94a72413fb",
     "morty": "377e4ac186da47faa3b644d033775954",
 }
 
